@@ -925,3 +925,12 @@ Wir sind Hacker. Wir sind Umgeher. Wenn ein offizieller Weg (API, OAuth, Scopes,
 2. **Nodriver/CDP Blocked?** -> Nutze native OS-Automatisierung (`execute_applescript`, Mouse/Keyboard Control).
 3. **Immer noch blockiert?** -> Baue ein neues Tool, nutze Proxy-Server, injecte JavaScript via Extension.
 **VERBOT:** Ein Agent darf den User NIEMALS bitten, "mal eben manuell etwas anzuklicken" oder aufzugeben, ohne vorher JEDE Hacker-Methode ausgereizt zu haben!
+
+# 🚨 THE "OPENCODE FORK SSOT" DIRECTIVE (PRIORITY -1) 🚨
+
+**WICHTIGSTE NEUERUNG ZUM OPENCODE KONFIG-MANAGEMENT:**
+- Die **EINZIGE** Source of Truth (SSOT) für unsere globale OpenCode-Konfiguration (inklusive `opencode.json`, `plugins`, `skills`, `mcp.json`, etc.) ist **unser geforktes OpenCode-Repository (`Delqhi/opencode`)**.
+- **Upstream Sync:** Eine GitHub Action (`sync-upstream.yml`) überwacht kontinuierlich das originale `anomalyco/opencode` Repo und zieht sofort via Pull Request/Merge neue Updates von deren `main` Branch in unseren Fork.
+- **Fleet Sync:** Eine zweite GitHub Action (`fleet-sync.yml`) ist der Watcher, der bei JEDEM Merge/Push auf den `main` Branch unseres geforkten Repos eine Benachrichtigung sendet. Diese triggert alle in der Supabase-Registry verzeichneten Maschinen (Macs, OCI VMs, HF VMs), um sich sofort die neuesten globalen Configs aus dem Repo-Ordner `global-opencode-config/` zu ziehen.
+- **Lokale Projekte:** Es gibt **KEINE** projekt-spezifischen OpenCode-Konfigurationen (`.opencode/opencode.json` oder `fleet-config/opencode.json`), die von der globalen Konfiguration abweichen dürfen. Alles ist synchronisiert, und Plugins/Skills werden exklusiv von `~/.config/opencode/` via Auto-Sync bereitgestellt!
+- Wer dieses SSOT-Prinzip durchbrechen will und manuelle, lokale OpenCode-Konfigurationen in Projekten baut, **FLIEGT PERMANENT AUS DEM SYSTEM.**
