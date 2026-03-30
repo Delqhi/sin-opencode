@@ -1,0 +1,19 @@
+# Secrets
+*accounts.json*
+token.json
+auth.json
+telegram_config.json
+auth/
+mcp.json
+
+# Cache, Logs, Profiles
+chrome_profile/
+antigravity-logs/
+logs/
+tmp/
+.cache/
+*.log
+*.bak*
+*.sqlite*
+*.db*
+*.patch
