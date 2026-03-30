@@ -1,19 +1,9 @@
-# Secrets
-*accounts.json*
-token.json
-auth.json
-telegram_config.json
-auth/
-mcp.json
-
-# Cache, Logs, Profiles
-chrome_profile/
+node_modules
+package.json
+bun.lock
+.gitignore
+antigravity-accounts.json
+antigravity-signature-cache.json
 antigravity-logs/
-logs/
-tmp/
-.cache/
-*.log
-*.bak*
-*.sqlite*
-*.db*
-*.patch
+.env
+antigravity-accounts.json.*.tmp
