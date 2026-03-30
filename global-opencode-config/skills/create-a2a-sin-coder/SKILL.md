@@ -170,3 +170,9 @@ Coder agents must not behave like blind OpenClaw-style plugin runners. They need
 - New generated docs should prefer `sin-document-forge` into the synced shared-drive folder.
 
 - Google Docs access must use the Google account matrix plus the `sin-google-docs` commands `ensure-access`, `ensure-patent-structure`, and `replace-patent-tabs` when relevant.
+
+### 🚨 GLOBAL SSOT DAEMON MANDATE (MANDATORY FOR ALL NEW CODER AGENTS)
+When scaffolding or initializing a new Coder Agent environment, you MUST integrate the Global SSOT Daemon.
+- **The Rule**: The Coder Agent's execution environment (HF Space or VM) MUST run the `ssot-daemon.sh` as a background process.
+- **Function**: The daemon continuously pulls `git@github.com:Delqhi/opencode.git` and enforces identical opencode configurations (`opencode.json`, `plugins`, `skills`, `mcp`) on the local VM.
+- **Why**: To guarantee that ANY change pushed to the `Delqhi/opencode` fork is immediately active across the entire A2A Coder Fleet worldwide within 60 seconds.
