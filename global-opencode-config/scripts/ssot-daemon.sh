@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# 100% Foolproof SSOT Sync Daemon
-# Pullt minütlich die global-opencode-config aus dem Fork.
 # Keine Webhooks. Keine GitHub Actions. Kein n8n. 100% Fail-Safe.
 
 REPO_URL="git@github.com:Delqhi/opencode.git"
 CLONE_DIR="$HOME/.opencode-ssot-repo"
 GLOBAL_DIR="$HOME/.config/opencode"
+MODULAR_DIR="$CLONE_DIR"
+LEGACY_DIR="$CLONE_DIR/global-opencode-config"
 
 echo "[SSOT] Daemon started. Checking every 60 seconds."
 
@@ -31,14 +31,68 @@ while true; do
         git pull origin main >/dev/null 2>&1
         
         echo "[SSOT] Aktualisiere globale Konfiguration..."
-        # Wir rsyncen die config OHNE secrets zu überschreiben
-        rsync -a \
-            --exclude '.git' --exclude 'auth' --exclude 'chrome_profile' \
-            --exclude '*accounts.json*' --exclude 'token.json' --exclude 'auth.json' \
-            --exclude 'telegram_config.json' --exclude '*.bak*' --exclude '*.db*' \
-            --exclude '*.sqlite*' --exclude 'logs' --exclude 'tmp' --exclude 'archive' \
-            "$CLONE_DIR/global-opencode-config/" "$GLOBAL_DIR/"
-            
+
+        file_src() {
+            local bucket="$1"
+            local rel="$2"
+            if [ -e "$MODULAR_DIR/$bucket/current/$rel" ]; then
+                printf '%s\n' "$MODULAR_DIR/$bucket/current/$rel"
+                return 0
+            fi
+            if [ -e "$LEGACY_DIR/$rel" ]; then
+                printf '%s\n' "$LEGACY_DIR/$rel"
+                return 0
+            fi
+            return 1
+        }
+
+        dir_src() {
+            local bucket="$1"
+            local rel="$2"
+            if [ -d "$MODULAR_DIR/$bucket/current" ]; then
+                printf '%s\n' "$MODULAR_DIR/$bucket/current"
+                return 0
+            fi
+            if [ -d "$LEGACY_DIR/$rel" ]; then
+                printf '%s\n' "$LEGACY_DIR/$rel"
+                return 0
+            fi
+            return 1
+        }
+
+        sync_file() {
+            local src="$1"
+            local dest="$2"
+            [ -e "$src" ] || return 0
+            mkdir -p "$(dirname "$dest")"
+            cp -f "$src" "$dest"
+        }
+
+        sync_tree() {
+            local src="$1"
+            local dest="$2"
+            [ -d "$src" ] || return 0
+            mkdir -p "$dest"
+            rsync -a \
+                --exclude '.git' --exclude 'auth' --exclude 'chrome_profile' \
+                --exclude '*accounts.json*' --exclude 'token.json' --exclude 'auth.json' \
+                --exclude 'telegram_config.json' --exclude '*.bak*' --exclude '*.db*' \
+                --exclude '*.sqlite*' --exclude 'logs' --exclude 'tmp' --exclude 'archive' \
+                "$src/" "$dest/"
+        }
+
+        sync_file "$(file_src OC-Konfigurationen opencode.json)" "$GLOBAL_DIR/opencode.json"
+        sync_file "$(file_src OC-Konfigurationen package.json)" "$GLOBAL_DIR/package.json"
+        sync_file "$(file_src OC-Konfigurationen bun.lock)" "$GLOBAL_DIR/bun.lock"
+        sync_file "$(file_src OC-Konfigurationen opencode.json.patch)" "$GLOBAL_DIR/opencode.json.patch"
+        sync_file "$(file_src MCPs mcp.json)" "$GLOBAL_DIR/mcp.json"
+
+        sync_tree "$(dir_src SIN-Plugins plugins)" "$GLOBAL_DIR/plugins"
+        sync_tree "$(dir_src Skills skills)" "$GLOBAL_DIR/skills"
+        sync_tree "$(dir_src Tools tools)" "$GLOBAL_DIR/tools"
+        sync_tree "$(dir_src Watcher scripts)" "$GLOBAL_DIR/scripts"
+        sync_tree "$(dir_src Wrapper scripts)" "$GLOBAL_DIR/scripts"
+
         echo "[SSOT] Aktualisiere ALLE lokalen Projekte..."
         for dir in "$HOME"/dev/*/.opencode "$HOME"/dev/*/fleet-config; do
             if [ -d "$dir" ]; then
