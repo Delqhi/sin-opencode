@@ -35,6 +35,10 @@ while true; do
         file_src() {
             local bucket="$1"
             local rel="$2"
+            if [ -e "$MODULAR_DIR/$bucket/$rel" ]; then
+                printf '%s\n' "$MODULAR_DIR/$bucket/$rel"
+                return 0
+            fi
             if [ -e "$MODULAR_DIR/$bucket/current/$rel" ]; then
                 printf '%s\n' "$MODULAR_DIR/$bucket/current/$rel"
                 return 0
@@ -49,6 +53,10 @@ while true; do
         dir_src() {
             local bucket="$1"
             local rel="$2"
+            if [ -d "$MODULAR_DIR/$bucket" ] && [ "$(ls -A "$MODULAR_DIR/$bucket" 2>/dev/null | grep -v '^README.md$' | head -1)" ]; then
+                printf '%s\n' "$MODULAR_DIR/$bucket"
+                return 0
+            fi
             if [ -d "$MODULAR_DIR/$bucket/current" ]; then
                 printf '%s\n' "$MODULAR_DIR/$bucket/current"
                 return 0
