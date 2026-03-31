@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Bootstrap: Replaces all local opencode.json with symlink to global
-# This ensures IMPOSSIBLE to have drift - local files ARE the global file
-
-GLOBAL_CONFIG="$HOME/.config/opencode/opencode.json"
+GLOBAL_CONFIG="$HOME/.config/opencode/OC-Konfigurationen/current/opencode.json"
+LEGACY_CONFIG="$HOME/.config/opencode/opencode.json"
 GIT_GLOBAL_CONFIG="$HOME/.open-auth-rotator/opencode.json"
 
 echo "=== OpenCode Config Bootstrap ==="
 
-# Use global config as source of truth
-if [[ -f "$GIT_GLOBAL_CONFIG" ]]; then
+if [[ -f "$GLOBAL_CONFIG" ]]; then
+    echo "Using modular config: $GLOBAL_CONFIG"
+elif [[ -f "$GIT_GLOBAL_CONFIG" ]]; then
     GLOBAL_CONFIG="$GIT_GLOBAL_CONFIG"
     echo "Using Git-tracked config: $GLOBAL_CONFIG"
 else
+    GLOBAL_CONFIG="$LEGACY_CONFIG"
     echo "Using local config: $GLOBAL_CONFIG"
 fi
 

@@ -50,4 +50,25 @@ opencode run "Analyze this repository" --model google/antigravity-gemini-3.1-pro
 ```
 
 ---
+
+## 🧭 Modular Layout Migration Matrix
+
+This repo is being reorganized into a bucketed layout without losing the existing SSOT content. The new buckets are a safe scaffold first; legacy paths remain valid until migration finishes.
+
+| Bucket | Current canonical source | Status |
+| --- | --- | --- |
+| `OC-Konfigurationen/` | `global-opencode-config/` (`opencode.json`, `package.json`, `bun.lock`, patches) | scaffolded |
+| `OpenCode/` | `packages/opencode/` | scaffolded |
+| `OC-Plugins/` | `packages/plugin/` | scaffolded |
+| `SIN-Plugins/` | `global-opencode-config/plugins/` | scaffolded |
+| `Provider/` | `packages/opencode/src/provider/` | scaffolded |
+| `MCPs/` | `global-opencode-config/mcp.json` and `.opencode/mcp.json` | scaffolded |
+| `Skills/` | `global-opencode-config/skills/` | scaffolded |
+| `Tools/` | `global-opencode-config/tools/` | scaffolded |
+| `Watcher/` | `global-opencode-config/scripts/` watcher entrypoints | scaffolded |
+| `Wrapper/` | `global-opencode-config/scripts/` wrapper entrypoints | scaffolded |
+
+Migration rule: the new buckets become the organizational home, while the legacy paths remain compatibility mirrors until all tooling has been switched.
+
+---
 *Maintained by the OpenSIN-AI Core Engineering Team. Upstream updates from anomalyco/opencode are automatically merged via a zero-dependency background sync daemon.*
