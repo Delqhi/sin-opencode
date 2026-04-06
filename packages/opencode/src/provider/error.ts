@@ -4,45 +4,36 @@ import { iife } from "@/util/iife"
 import type { ProviderID } from "./schema"
 
 export namespace ProviderError {
-  // Adapted from overflow detection patterns in:
-  // https://github.com/badlogic/pi-mono/blob/main/packages/ai/src/utils/overflow.ts
   const OVERFLOW_PATTERNS = [
-    /prompt is too long/i, // Anthropic
-    /input is too long for requested model/i, // Amazon Bedrock
-    /exceeds the context window/i, // OpenAI (Completions + Responses API message text)
-    /input token count.*exceeds the maximum/i, // Google (Gemini)
-    /maximum prompt length is \d+/i, // xAI (Grok)
-    /reduce the length of the messages/i, // Groq
-    /maximum context length is \d+ tokens/i, // OpenRouter, DeepSeek, vLLM
-    /exceeds the limit of \d+/i, // GitHub Copilot
-    /exceeds the available context size/i, // llama.cpp server
-    /greater than the context length/i, // LM Studio
-    /context window exceeds limit/i, // MiniMax
-    /exceeded model token limit/i, // Kimi For Coding, Moonshot
-    /context[_ ]length[_ ]exceeded/i, // Generic fallback
-    /request entity too large/i, // HTTP 413
-    /context length is only \d+ tokens/i, // vLLM
-    /input length.*exceeds.*context length/i, // vLLM
-    /prompt too long; exceeded (?:max )?context length/i, // Ollama explicit overflow error
-    /too large for model with \d+ maximum context length/i, // Mistral
-    /model_context_window_exceeded/i, // z.ai non-standard finish_reason surfaced as error text
+    /prompt is too long/i,
+    /input is too long for requested model/i,
+    /exceeds the context window/i,
+    /input token count.*exceeds the maximum/i,
+    /maximum prompt length is \d+/i,
+    /reduce the length of the messages/i,
+    /maximum context length is \d+ tokens/i,
+    /exceeds the limit of \d+/i,
+    /exceeds the available context size/i,
+    /greater than the context length/i,
+    /context window exceeds limit/i,
+    /exceeded model token limit/i,
+    /context[_ ]length[_ ]exceeded/i,
+    /request entity too large/i,
+    /context length is only \d+ tokens/i,
+    /input length.*exceeds.*context length/i,
+    /prompt too long; exceeded (?:max )?context length/i,
+    /too large for model with \d+ maximum context length/i,
+    /model_context_window_exceeded/i,
   ]
 
   function isOpenAiErrorRetryable(e: APICallError) {
     const status = e.statusCode
     if (!status) return e.isRetryable
-    // openai sometimes returns 404 for models that are actually available
     return status === 404 || e.isRetryable
   }
 
-  // Providers not reliably handled in this function:
-  // - z.ai: can accept overflow silently (needs token-count/context-window checks)
   function isOverflow(message: string) {
     if (OVERFLOW_PATTERNS.some((p) => p.test(message))) return true
-
-    // Providers/status patterns handled outside of regex list:
-    // - Cerebras: often returns "400 (no body)" / "413 (no body)"
-    // - Mistral: often returns "400 (no body)" / "413 (no body)"
     return /^4(00|13)\s*(status code)?\s*\(no body\)/i.test(message)
   }
 
@@ -64,15 +55,12 @@ export namespace ProviderError {
 
       try {
         const body = JSON.parse(e.responseBody)
-        // try to extract common error message fields
         const errMsg = body.message || body.error || body.error?.message
         if (errMsg && typeof errMsg === "string") {
           return `${msg}: ${errMsg}`
         }
       } catch {}
 
-      // If responseBody is HTML (e.g. from a gateway or proxy error page),
-      // provide a human-readable message instead of dumping raw markup
       if (/^\s*<!doctype|^\s*<html/i.test(e.responseBody)) {
         if (e.statusCode === 401) {
           return "Unauthorized: request was blocked by a gateway or proxy. Your authentication token may be missing or expired — try running `opencode auth login <your provider URL>` to re-authenticate."
@@ -101,6 +89,23 @@ export namespace ProviderError {
       return input
     }
     return undefined
+  }
+
+  function isRateLimit(body: unknown, msg: string) {
+    if (typeof msg === "string") {
+      if (msg.includes("Request rate increased too quickly")) return true
+      if (msg.includes("Upstream error from Alibaba")) return true
+    }
+    if (body && typeof body === "object") {
+      const b = body as Record<string, unknown>
+      if (b.metadata && typeof b.metadata === "object") {
+        const meta = b.metadata as Record<string, unknown>
+        if (meta.error_type === "provider_unavailable") return true
+      }
+      if (b.code === 502 && typeof b.message === "string" && b.message.includes("Upstream error")) return true
+      if (typeof b.message === "string" && b.message.includes("Request rate increased too quickly")) return true
+    }
+    return false
   }
 
   export type ParsedStreamError =
@@ -181,14 +186,17 @@ export namespace ProviderError {
       }
     }
 
+    const rateLimit = isRateLimit(body, m)
     const metadata = input.error.url ? { url: input.error.url } : undefined
     return {
       type: "api_error",
       message: m,
       statusCode: input.error.statusCode,
-      isRetryable: input.providerID.startsWith("openai")
-        ? isOpenAiErrorRetryable(input.error)
-        : input.error.isRetryable,
+      isRetryable: rateLimit
+        ? true
+        : input.providerID.startsWith("openai")
+          ? isOpenAiErrorRetryable(input.error)
+          : input.error.isRetryable,
       responseHeaders: input.error.responseHeaders,
       responseBody: input.error.responseBody,
       metadata,
