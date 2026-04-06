@@ -8,8 +8,8 @@ export namespace SessionRetry {
 
   export const RETRY_INITIAL_DELAY = 2000
   export const RETRY_BACKOFF_FACTOR = 2
-  export const RETRY_MAX_DELAY_NO_HEADERS = 30_000 // 30 seconds
-  export const RETRY_MAX_DELAY = 2_147_483_647 // max 32-bit signed integer for setTimeout
+  export const RETRY_MAX_DELAY_NO_HEADERS = 30_000
+  export const RETRY_MAX_DELAY = 2_147_483_647
 
   function cap(ms: number) {
     return Math.min(ms, RETRY_MAX_DELAY)
@@ -31,10 +31,8 @@ export namespace SessionRetry {
         if (retryAfter) {
           const parsedSeconds = Number.parseFloat(retryAfter)
           if (!Number.isNaN(parsedSeconds)) {
-            // convert seconds to milliseconds
             return cap(Math.ceil(parsedSeconds * 1000))
           }
-          // Try parsing as HTTP date format
           const parsed = Date.parse(retryAfter) - Date.now()
           if (!Number.isNaN(parsed) && parsed > 0) {
             return cap(Math.ceil(parsed))
@@ -48,44 +46,60 @@ export namespace SessionRetry {
     return cap(Math.min(RETRY_INITIAL_DELAY * Math.pow(RETRY_BACKOFF_FACTOR, attempt - 1), RETRY_MAX_DELAY_NO_HEADERS))
   }
 
+  function isRateLimitError(error: Err) {
+    const rawMsg = error.data?.message || error.data?.responseBody || ""
+    if (typeof rawMsg === "string") {
+      if (rawMsg.includes("Request rate increased too quickly")) return "Alibaba rate limit - backing off"
+      if (rawMsg.includes("Upstream error from Alibaba")) return "Alibaba upstream error - retrying"
+    }
+
+    const json = iife(() => {
+      try {
+        if (typeof error.data?.message === "string") return JSON.parse(error.data.message)
+        if (typeof error.data?.responseBody === "string") return JSON.parse(error.data.responseBody)
+        return undefined
+      } catch {
+        return undefined
+      }
+    })
+
+    if (json && typeof json === "object") {
+      if (json.metadata?.error_type === "provider_unavailable") return "Provider unavailable - retrying"
+      if (json.code === 502 && json.message?.includes("Upstream error")) return "Upstream error - retrying"
+      if (json.message?.includes("Request rate increased too quickly")) return "Alibaba rate limit - backing off"
+    }
+
+    return undefined
+  }
+
   export function retryable(error: Err) {
-    // context overflow errors should not be retried
     if (MessageV2.ContextOverflowError.isInstance(error)) return undefined
+
+    const rateLimit = isRateLimitError(error)
+    if (rateLimit) return rateLimit
+
     if (MessageV2.APIError.isInstance(error)) {
       if (!error.data.isRetryable) return undefined
       if (error.data.responseBody?.includes("FreeUsageLimitError"))
         return `Free usage exceeded, add credits https://opencode.ai/zen`
-      if (error.data.message?.includes("Request rate increased too quickly"))
-        return "Alibaba rate limit - backing off"
-      if (error.data.message?.includes("Upstream error from Alibaba"))
-        return "Alibaba upstream error - retrying"
       return error.data.message.includes("Overloaded") ? "Provider is overloaded" : error.data.message
     }
 
     const json = iife(() => {
       try {
-        if (typeof error.data?.message === "string") {
-          const parsed = JSON.parse(error.data.message)
-          return parsed
-        }
-
-        return JSON.parse(error.data.message)
+        if (typeof error.data?.message === "string") return JSON.parse(error.data.message)
+        return undefined
       } catch {
         return undefined
       }
     })
     if (!json || typeof json !== "object") return undefined
-    const code = typeof json.code === "string" ? json.code : ""
-
-    if (json.message?.includes("Request rate increased too quickly"))
-      return "Alibaba rate limit - backing off"
-    if (json.message?.includes("Upstream error from Alibaba"))
-      return "Alibaba upstream error - retrying"
+    const code = json.code
 
     if (json.type === "error" && json.error?.type === "too_many_requests") {
       return "Too Many Requests"
     }
-    if (code.includes("exhausted") || code.includes("unavailable")) {
+    if (typeof code === "string" && (code.includes("exhausted") || code.includes("unavailable"))) {
       return "Provider is overloaded"
     }
     if (json.type === "error" && typeof json.error?.code === "string" && json.error.code.includes("rate_limit")) {
