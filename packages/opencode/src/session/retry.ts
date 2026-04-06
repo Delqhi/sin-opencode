@@ -48,6 +48,7 @@ export namespace SessionRetry {
 
   function isRateLimitError(error: Err) {
     const rawMsg = error.data?.message || error.data?.responseBody || ""
+
     if (typeof rawMsg === "string") {
       if (rawMsg.includes("Request rate increased too quickly")) return "Alibaba rate limit - backing off"
       if (rawMsg.includes("Upstream error from Alibaba")) return "Alibaba upstream error - retrying"
@@ -57,6 +58,29 @@ export namespace SessionRetry {
       try {
         if (typeof error.data?.message === "string") return JSON.parse(error.data.message)
         if (typeof error.data?.responseBody === "string") return JSON.parse(error.data.responseBody)
+        if (typeof error.data?.message === "object" && error.data.message !== null) return error.data.message
+        if (typeof error.data?.responseBody === "object" && error.data.responseBody !== null) return error.data.responseBody
+        return undefined
+      } catch {
+        return undefined
+      }
+    })
+
+    if (json && typeof json === "object") {
+      if (json.metadata?.error_type === "provider_unavailable") return "Provider unavailable - retrying"
+      if (json.code === 502 && json.message?.includes("Upstream error")) return "Upstream error - retrying"
+      if (json.message?.includes("Request rate increased too quickly")) return "Alibaba rate limit - backing off"
+    }
+
+    return undefined
+  }
+
+    const json = iife(() => {
+      try {
+        if (typeof error.data?.message === "string") return JSON.parse(error.data.message)
+        if (typeof error.data?.responseBody === "string") return JSON.parse(error.data.responseBody)
+        if (typeof error.data?.message === "object" && error.data.message !== null) return error.data.message
+        if (typeof error.data?.responseBody === "object" && error.data.responseBody !== null) return error.data.responseBody
         return undefined
       } catch {
         return undefined
@@ -88,6 +112,7 @@ export namespace SessionRetry {
     const json = iife(() => {
       try {
         if (typeof error.data?.message === "string") return JSON.parse(error.data.message)
+        if (typeof error.data?.responseBody === "string") return JSON.parse(error.data.responseBody)
         return undefined
       } catch {
         return undefined
