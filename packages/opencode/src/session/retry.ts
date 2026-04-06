@@ -55,6 +55,10 @@ export namespace SessionRetry {
       if (!error.data.isRetryable) return undefined
       if (error.data.responseBody?.includes("FreeUsageLimitError"))
         return `Free usage exceeded, add credits https://opencode.ai/zen`
+      if (error.data.message?.includes("Request rate increased too quickly"))
+        return "Alibaba rate limit - backing off"
+      if (error.data.message?.includes("Upstream error from Alibaba"))
+        return "Alibaba upstream error - retrying"
       return error.data.message.includes("Overloaded") ? "Provider is overloaded" : error.data.message
     }
 
@@ -72,6 +76,11 @@ export namespace SessionRetry {
     })
     if (!json || typeof json !== "object") return undefined
     const code = typeof json.code === "string" ? json.code : ""
+
+    if (json.message?.includes("Request rate increased too quickly"))
+      return "Alibaba rate limit - backing off"
+    if (json.message?.includes("Upstream error from Alibaba"))
+      return "Alibaba upstream error - retrying"
 
     if (json.type === "error" && json.error?.type === "too_many_requests") {
       return "Too Many Requests"
