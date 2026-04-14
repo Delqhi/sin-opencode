@@ -90,7 +90,6 @@ export const SessionQuestionDock: Component<{ request: QuestionRequest; onSubmit
   const multi = createMemo(() => question()?.multiple === true)
   const count = createMemo(() => options().length + 1)
   const chosen = createMemo(() => store.answers[store.tab]?.length ?? 0)
-  const count = createMemo(() => options().length + 1)
 
   const summary = createMemo(() => {
     const n = Math.min(store.tab + 1, total())
