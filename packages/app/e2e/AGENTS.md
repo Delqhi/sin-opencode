@@ -1,3 +1,5 @@
+---
+content: |
 # E2E Testing Guide
 
 ## Build/Lint/Test Commands
@@ -101,10 +103,10 @@ test("test description", async ({ page, sdk, gotoSession }) => {
 Always import from `../fixtures`, not `@playwright/test`:
 
 ```typescript
-// ✅ Good
+//  Good
 import { test, expect } from "../fixtures"
 
-// ❌ Bad
+//  Bad
 import { test, expect } from "@playwright/test"
 ```
 
@@ -149,11 +151,11 @@ test("slow test", async () => {
 Use `data-component`, `data-action`, or semantic roles:
 
 ```typescript
-// ✅ Good
+//  Good
 await page.locator('[data-component="prompt-input"]').click()
 await page.getByRole("button", { name: "Open settings" }).click()
 
-// ❌ Bad
+//  Bad
 await page.locator(".css-class-name").click()
 await page.locator("#id-name").click()
 ```

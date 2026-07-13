@@ -1,0 +1,1 @@
+Architecture visualization with module boundary detection, entry point discovery, hot path analysis, and complexity metrics. Scans source files, identifies logical modules, detects architecture style, and surfaces orphaned files, bottlenecks, and design patterns. Use this when you need to understand a project's structure beyond simple file listing.

@@ -39,7 +39,7 @@ Note: as of **March 8, 2026**, Google's official public docs expose `gemini-3.1-
 - Else → **generate**
 
 ## Workflow
-2. **Zero-Config Rule:** The Gemini key may be used only as a runtime env/input for the image generation call. It must never be written into `opencode.json`, `oh-my-opencode.json`, or any global OpenCode provider config.
+2. **Zero-Config Rule:** The Gemini key may be used only as a runtime env/input for the image generation call. It must never be written into `opencode.json`, `oh-my-openagent.json`, or any global OpenCode provider config.
 3. **Automated Browser Fallback (MCP only):** If the HTTP path returns `SERVICE_DISABLED` for `serviceusage.googleapis.com` or `apikeys.googleapis.com`, the agent must use `webauto-nodriver` MCP browser automation, not ask the end user to click anything. The production fallback order is:
    - if Cloud Console stalls, lacks permissions, or deadlocks on `serviceusage`, automatically switch to Google AI Studio (`https://aistudio.google.com/app/api-keys`), complete the agreements, use `Get API key`, and create the key from the visible `Default Gemini Project`
 4. **Runtime Extraction Rule:** In the AI Studio fallback, the key must be extracted from the network response of `GenerateCloudApiKey` and then validated against the Gemini `models` endpoint. Do not rely on masked UI text alone.

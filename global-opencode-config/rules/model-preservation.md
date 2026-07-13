@@ -15,7 +15,7 @@ The user has explicitly mandated the use of specific Google Gemini preview model
    - Rate limits
    - Timeout
    
-   **DO NOT remove the model from opencode.json or oh-my-opencode.json.**
+   **DO NOT remove the model from opencode.json or oh-my-openagent.json.**
 
 3. **The exact provider strings are ABSOLUTE and IMMUTABLE:**
    - `google/gemini-3.1-pro-preview` (MIT -preview!)

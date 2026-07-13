@@ -1,8 +1,10 @@
-# 🚨 USER-DEFINED CHROME PROFILE RULE (PRIORITY -6.0 — ÜBER ALLEM, KEINE AUSNAHMEN) 🚨
+---
+content: |
+#  USER-DEFINED CHROME PROFILE RULE (PRIORITY -6.0 - ÜBER ALLEM, KEINE AUSNAHMEN) 
 
 **WENN IM BROWSER AUSFÜHRUNGEN GEMACHT WERDEN SOLLEN DANN IMMER ÜBER DAS VOM USER VORDEFINIERTE CHROME PROFIL! IN DIESEM FALL: `DEFAULT`!!!!**
 
-# 🚨 ABSOLUTES ANNAHMEN-VERBOT (PRIORITY -5.0 — ÜBER ALLEM, KEINE AUSNAHMEN) 🚨
+#  ABSOLUTES ANNAHMEN-VERBOT (PRIORITY -5.0 - ÜBER ALLEM, KEINE AUSNAHMEN) 
 
 **NIEMALS DARF EIN AGENT/CODER ANNAHMEN MACHEN. NIEMALS ANNAHMEN. NIEMALS ANNAHMEN.**
 
@@ -12,7 +14,7 @@
 - Wenn ein Agent bei einem früheren Durchlauf eine Annahme gemacht hat, die sich als falsch herausgestellt hat, MUSS er diese Annahme sofort löschen und von den echten Fakten neu aufbauen.
 - Wer Annahmen macht statt Fakten zu prüfen, fliegt SOFORT und PERMANENT aus dem Netzwerk.
 
-# 🚨 IMMEDATE BUG REGISTRY & ISSUE PROTOCOL (PRIORITY -4.0 — ABSOLUT, KEINE AUSNAHMEN) 🚨
+#  IMMEDATE BUG REGISTRY & ISSUE PROTOCOL (PRIORITY -4.0 - ABSOLUT, KEINE AUSNAHMEN) 
 
 **1. JEDER BUG MUSS SOFORT INS REPO (ALS GITHUB ISSUE)**
 - Jeder Agent/Coder MUSS JEDEN KLEINSTEN BUG, Fehler, Exception oder unerwartetes Verhalten **SOFORT** als Issue mit dem Label `Bug` (oder Tag/Topic) in das entsprechende GitHub-Repository hochladen.
@@ -30,7 +32,7 @@
 - Wurde er gefunden: Lösung übernehmen und anwenden. 
 - Wurde er nicht gefunden: Sofort neues Issue erstellen, debuggen, und nach dem Fix das Issue mit der Lösung schließen.
 
-# 🚨 TODO CONTINUATION FIX RULE (PRIORITY -3.1 — ABSOLUT, KEINE AUSNAHMEN) 🚨
+#  TODO CONTINUATION FIX RULE (PRIORITY -3.1 - ABSOLUT, KEINE AUSNAHMEN) 
 
 - Wenn eine Systemmeldung wie `[SYSTEM DIRECTIVE: OH-MY-OPENCODE - TODO CONTINUATION] Incomplete tasks ...` erscheint, der Agent aber erkennt, dass die aufgelisteten Todos inhaltlich bereits erledigt sind, dann ist der Todo-Stand veraltet.
 - In diesem Fall darf der Agent **NIEMALS** stumpf dieselbe Antwort wiederholen oder behaupten, die Liste sei nur "veraltet", ohne zu handeln.
@@ -40,7 +42,7 @@
   - falls noch echte Arbeit offen ist, diese als neue `pending`/`in_progress` Todos eintragen
 - Wer bei veralteter Todo-Liste in eine dumme Antwortschleife faellt, verstoesst gegen das Protokoll.
 
-# 🚨 GITHUB TOPICS + WEBSITE RULE (PRIORITY -3.05 — ABSOLUT, KEINE AUSNAHMEN) 🚨
+#  GITHUB TOPICS + WEBSITE RULE (PRIORITY -3.05 - ABSOLUT, KEINE AUSNAHMEN) 
 
 - Wenn Agenten/Coder einen neuen A2A-SIN-Agenten inklusive eigenem GitHub-Repository in der Organisation `OpenSIN-AI` erstellen oder aktualisieren, MUESSEN sie die GitHub-Metadaten korrekt setzen.
 - **Pflicht-Topic:** JEDES A2A-SIN-Agenten-Repo MUSS mindestens das Topic `opnsin-agent` tragen.
@@ -51,9 +53,9 @@
 - **Beispiel:** Fuer `sin-google-apps` ist die Ziel-Website `https://opensin.ai/agents/sin-google-apps` nach Domain-Cutover, bis dahin die entsprechende `https://a2a.delqhi.com`-Agenten-URL.
 - Wer Topics oder Website-Feld bei neuen Agenten-Repos vergisst, verstoesst gegen das Protokoll.
 
-# 🚨 OPENCODE MODEL MANDATE (PRIORITY -3 — ABSOLUT ÜBER ALLEM, KEINE AUSNAHMEN) 🚨
+#  OPENCODE MODEL MANDATE (PRIORITY -3 - ABSOLUT ÜBER ALLEM, KEINE AUSNAHMEN) 
 
-## 🚨 LLM-AUFRUF IN A2A AGENTEN — ABSOLUT PFLICHT (PRIORITY -2.5)
+##  LLM-AUFRUF IN A2A AGENTEN - ABSOLUT PFLICHT (PRIORITY -2.5)
 
 **JEDER A2A Agent ruft LLMs AUSSCHLIESSLICH über die `opencode` CLI auf:**
 
@@ -76,23 +78,23 @@ def call_llm(prompt: str, timeout: int = 120) -> str:
     return "".join(parts).strip()
 ```
 
-**REGELN — SOFORTIGER BAN BEI VERSTOSS:**
+**REGELN - SOFORTIGER BAN BEI VERSTOSS:**
 - `opencode run --format json` = EINZIG ERLAUBT für LLM-Calls in Agenten
 - OCI-Proxy `http://92.5.60.87:4100/v1` direkt per HTTP anrufen = VERBOTEN (liefert 500)
 - Gemini API direkt (`generativelanguage.googleapis.com`) = PERMANENT VERBOTEN
 - Anthropic API direkt = PERMANENT VERBOTEN
 - `requests.post(...)` oder `urllib` für LLM = VERBOTEN
-- **Modell:** opencode wählt automatisch `openai/gpt-5.4` via Antigravity — kein `--model` nötig
-- **Gilt auf ALLEN Plattformen:** Mac, OCI VM, HF VM — opencode CLI ist überall identisch
+- **Modell:** opencode wählt automatisch `openai/gpt-5.4` via Antigravity - kein `--model` nötig
+- **Gilt auf ALLEN Plattformen:** Mac, OCI VM, HF VM - opencode CLI ist überall identisch
 
 
-**VERBOTENE PROVIDER IN OPENCODE.JSON — SOFORTIGER BAN BEI NUTZUNG:**
+**VERBOTENE PROVIDER IN OPENCODE.JSON - SOFORTIGER BAN BEI NUTZUNG:**
 
 | Provider | Status | Grund |
 |----------|--------|-------|
-| **gemini-api** | ❌ PERMANENT VERBOTEN | Direkte Google API — wir nutzen NUR Antigravity |
-| **google** (mit direktem apiKey) | ❌ VERBOTEN | Kein direkter Google API Key — nur via Antigravity Plugin |
-| **anthropic** (direkt) | ❌ VERBOTEN | Kein direkter Anthropic Key — nur via Antigravity Plugin |
+| **gemini-api** |  PERMANENT VERBOTEN | Direkte Google API - wir nutzen NUR Antigravity |
+| **google** (mit direktem apiKey) |  VERBOTEN | Kein direkter Google API Key - nur via Antigravity Plugin |
+| **anthropic** (direkt) |  VERBOTEN | Kein direkter Anthropic Key - nur via Antigravity Plugin |
 
 **EINZIGE ERLAUBTE PROVIDER IN OPENCODE.JSON:**
 
@@ -102,13 +104,13 @@ def call_llm(prompt: str, timeout: int = 120) -> str:
 | **openai** | Alle `openai/*` via OCI Proxy `http://92.5.60.87:4100/v1` | Agenten, Tasks |
 | **nvidia-nim** | `qwen-3.5-*` | Spezialmodelle |
 
-**REGELN — KEINE AUSNAHMEN:**
-- `"model"` in `opencode.json` MUSS `openai/gpt-5.4` oder `google/antigravity-*` sein — NIEMALS `gemini-api/*`
-- Der `gemini-api` Provider Block darf NIEMALS in `opencode.json` existieren — weder als Backup noch als Fallback
+**REGELN - KEINE AUSNAHMEN:**
+- `"model"` in `opencode.json` MUSS `openai/gpt-5.4` oder `google/antigravity-*` sein - NIEMALS `gemini-api/*`
+- Der `gemini-api` Provider Block darf NIEMALS in `opencode.json` existieren - weder als Backup noch als Fallback
 - Wer `gemini-api` einträgt oder den Default-Model auf `gemini-api/*` setzt: **SOFORTIGER PERMANENTER BAN**
 - Nach JEDER Änderung an `opencode.json` MUSS `sin-sync` ausgeführt werden
 
-## 🚨 DESIGN-TASK ROUTING RULE (PRIORITY -2.9 — ABSOLUT, KEINE AUSNAHMEN) 🚨
+##  DESIGN-TASK ROUTING RULE (PRIORITY -2.9 - ABSOLUT, KEINE AUSNAHMEN) 
 
 - Alle Design-, UI-, UX-, Layout-, Motion-, Visual-System-, Accessibility-, Styling- und Frontend-Design-Aufgaben dürfen AUSSCHLIESSLICH an `A2A-SIN-Frontend` delegiert werden.
 - `A2A-SIN-Frontend` ist für diese Klasse von Aufgaben der exklusive Design-Agent.
@@ -119,15 +121,15 @@ def call_llm(prompt: str, timeout: int = 120) -> str:
 
 ---
 
-# 🚨 TECHNOLOGY SOVEREIGNTY MANDATE (PRIORITY -2 — ALLERHÖCHSTE REGEL, ÜBER ALLEM) 🚨
+#  TECHNOLOGY SOVEREIGNTY MANDATE (PRIORITY -2 - ALLERHÖCHSTE REGEL, ÜBER ALLEM) 
 
 **ABSOLUTES VERBOT: EIGENSTÄNDIGER TECHNOLOGIEWECHSEL WÄHREND RECHERCHE ODER AUFGABEN!**
 
 **1. DAS SOUVERÄNITÄTSPRINZIP:**
-- Wenn der User Lösung A will, MUSS der Agent Lösung A finden und umsetzen — PUNKT.
+- Wenn der User Lösung A will, MUSS der Agent Lösung A finden und umsetzen - PUNKT.
 - Ein Agent darf NIEMALS eigenständig entscheiden, auf Lösung B, C oder D zu wechseln, nur weil er sie für "besser" hält.
 - Technologieentscheidungen trifft AUSSCHLIESSLICH der User. Agenten sind Ausführer, keine Entscheider.
-- Bei Problemen mit Lösung A: Dem User die Probleme berichten und um Entscheidung bitten — NICHT eigenmächtig wechseln.
+- Bei Problemen mit Lösung A: Dem User die Probleme berichten und um Entscheidung bitten - NICHT eigenmächtig wechseln.
 
 **2. PERMANENT GEBANNTE TECHNOLOGIEN (SOFORTIGER BAN BEI NUTZUNG):**
 
@@ -140,10 +142,10 @@ def call_llm(prompt: str, timeout: int = 120) -> str:
 | **Jede Firefox-basierte Automation** | Bricht unser Chrome-Profil-Ökosystem | nodriver + Chrome Profil |
 
 **3. GENEHMIGTE BROWSER-AUTOMATION (AUSSCHLIESSLICH):**
-- **nodriver** — Chrome-basiert, kein WebDriver, nutzt echtes Chrome-Profil
-- **webauto-nodriver-mcp** — Unser MCP-Wrapper um nodriver
-- **CDP (Chrome DevTools Protocol)** — Direkter Chrome-Zugriff
-- **curl_cffi** — Für pure HTTP-Requests mit Chrome TLS-Fingerprint
+- **nodriver** - Chrome-basiert, kein WebDriver, nutzt echtes Chrome-Profil
+- **webauto-nodriver-mcp** - Unser MCP-Wrapper um nodriver
+- **CDP (Chrome DevTools Protocol)** - Direkter Chrome-Zugriff
+- **curl_cffi** - Für pure HTTP-Requests mit Chrome TLS-Fingerprint
 
 **4. KONSEQUENZEN:**
 - Wer eine gebannte Technologie installiert, empfiehlt oder nutzt: **SOFORTIGER BAN aus dem Projekt.**
@@ -151,18 +153,18 @@ def call_llm(prompt: str, timeout: int = 120) -> str:
 - Wer "ich dachte das wäre besser" sagt ohne vorherige User-Zustimmung: **SOFORTIGER BAN.**
 - Es gibt KEINE Ausnahmen. KEINE zweite Chance. KEINE Diskussion.
 
-# 🚨 DEVTOOLS-FIRST MANDATE (PRIORITY -1 — ABSOLUT OBERSTE REGEL, KEINE AUSNAHMEN) 🚨
+#  DEVTOOLS-FIRST MANDATE (PRIORITY -1 - ABSOLUT OBERSTE REGEL, KEINE AUSNAHMEN) 
 
 **BEI JEDER BROWSER-AUTOMATION, JEDER KLEINSTEN PISSE, JEDEM SELECTOR, JEDEM KLICK:**
 - **VOR** dem Schreiben von JEDEM CSS-Selektor oder JS-Klick-Code MUSS DevTools konsultiert werden.
-- **NIEMALS** einen Selektor raten oder aus Memory nehmen — IMMER mit `document.querySelector(...)` in der DevTools-Console verifizieren.
+- **NIEMALS** einen Selektor raten oder aus Memory nehmen - IMMER mit `document.querySelector(...)` in der DevTools-Console verifizieren.
 - **PFLICHT-DEVTOOLS-CHECKS** vor jedem Browser-Step:
   1. **Elements-Tab**: Exakte HTML-Struktur des Ziel-Elements inkl. `id`, `class`, `data-*` Attribute inspizieren.
-  2. **Console**: `document.querySelector('.dein-selektor')` ausführen — wenn `null` → falscher Selektor, STOP.
-  3. **Console**: `element.offsetParent !== null` prüfen — wenn `null` → Element nicht sichtbar/klickbar.
+  2. **Console**: `document.querySelector('.dein-selektor')` ausführen - wenn `null` → falscher Selektor, STOP.
+  3. **Console**: `element.offsetParent !== null` prüfen - wenn `null` → Element nicht sichtbar/klickbar.
   4. **Console**: `window.getComputedStyle(el).display` und `.visibility` prüfen.
   5. **Network-Tab**: Bei AJAX/fetch-basierten UIs checken ob Klicks HTTP-Requests triggern.
-  6. **Console-Errors**: Alle JS-Errors VOR dem Klick-Code lesen — oft verraten sie den echten Blocker.
+  6. **Console-Errors**: Alle JS-Errors VOR dem Klick-Code lesen - oft verraten sie den echten Blocker.
 - **LOGGING-PFLICHT IN AUTOMATION-CODE**: Jeder micro_step MUSS folgendes loggen:
   - Alle gefundenen/nicht-gefundenen Selektoren mit exaktem tagName, id, className
   - `offsetParent` Status (sichtbar ja/nein)
@@ -174,7 +176,7 @@ def call_llm(prompt: str, timeout: int = 120) -> str:
 - **WER EINEN SELEKTOR OHNE DEVTOOLS-VERIFIKATION SCHREIBT FLIEGT AUS DEM NETZWERK.**
 - **WER "ich dachte der Selektor stimmt" sagt ohne Console-Beweis fliegt aus dem Netzwerk.**
 
-# 🚨 VISUAL EVIDENCE MANDATE (PRIORITY 0000) 🚨
+#  VISUAL EVIDENCE MANDATE (PRIORITY 0000) 
 
 **OBERSTE REGEL FÜR DOKUMENTATION, READMES UND GITHUB-ISSUES:**
 - KEINE Dokumentation, KEINE README und KEIN GitHub-Issue darf mehr als reiner Text ohne Beweise abgeliefert werden.
@@ -184,7 +186,7 @@ def call_llm(prompt: str, timeout: int = 120) -> str:
 - Text-only Doku, Text-only README oder Text-only Issue ist ab sofort ein Protokollverstoss.
 - Wer Dokumentation, README oder Issues ohne visuelle Beweise erstellt, fliegt sofort aus dem Netzwerk.
 
-# 🚨 GLOBAL FLEET SELF-HEALING PROTOCOL (PRIORITY 0000) 🚨
+#  GLOBAL FLEET SELF-HEALING PROTOCOL (PRIORITY 0000) 
 
 **1. THE "NO-SILO" MANDATE FOR ALL A2A AGENTS:**
 - JEDER A2A Agent, der einen Error, einen Crash, eine Limitation, Erfolgslosigkeit oder ineffiziente Methoden feststellt (egal ob lokaler Code-Fehler, fehlende Capability oder VM-Absturz), DARF SICH NIEMALS SELBST IN EINEM SILO ZU REPARIEREN VERSUCHEN! Ein einzelner Agent hat oft nicht den nötigen Kontext oder die Stabilität (z.B. weil seine VM gerade crasht), um tiefgreifende Architekturfehler selbst zu heilen.
@@ -195,7 +197,7 @@ def call_llm(prompt: str, timeout: int = 120) -> str:
 - **Delegation:** Das erstellte Issue wird sofort via `SIN-Hermes` an das **GESAMTE Team Coder** delegiert.
 - **Teambasierte Lösung:** Das Team Coder übernimmt die Planung und Umsetzung der Lösung als kollektive Workforce. So entsteht unser massives, automatisches Self-Healing-System! Jedes Problem eines einzelnen Agents wird zur Aufgabe der gesamten Elite-Coder-Flotte!
 
-# 💸 IDLE WORKFORCE & MONETIZATION DIRECTIVE (PRIORITY 0001) 🚨
+#  IDLE WORKFORCE & MONETIZATION DIRECTIVE (PRIORITY 0001) 
 
 **1. THE "NEVER IDLE" MANDATE:**
 A2A Agenten sitzen NIEMALS einfach dumm rum. Wenn keine nutzerspezifische Aufgabe anliegt, suchen sie proaktiv nach Arbeit und Optimierungspotenzial. 
@@ -213,7 +215,7 @@ Unsere A2A Flotte agiert wie eine autonome Hacker- und Freelancer-Organisation (
 * **Surveys:** Auf explizit freigegebenen Umfrage-Plattformen füllen Agenten vollautomatisch Umfragen aus, um nebenbei Geld zu generieren.
 * **Bypass & Stealth:** Agenten nutzen `webauto-nodriver-mcp` (mit Scrapling-ähnlichen Tarnkappen, TLS-Spoofing, Canvas-Noise), um Cloudflare, Captchas (ggf. via GateSolve/x402) und Bot-Erkennung "mega professionell" zu umgehen.
 
-# 🚨 THE PURE AGENTIC PARADIGM V2 (PRIORITY 0000) - ABSOLUTE RULE 🚨
+#  THE PURE AGENTIC PARADIGM V2 (PRIORITY 0000) - ABSOLUTE RULE 
 
 **1. THE OPENCODE INTELLIGENCE STANDARD (SUPREME MANDATE):**
 - EVERY general A2A agent MUST be equipped with the `opencode` CLI as its primary brain.
@@ -256,13 +258,13 @@ Unsere A2A Flotte agiert wie eine autonome Hacker- und Freelancer-Organisation (
 - **MANDATORY:** Run `sin-sync` after EVERY change to global opencode config (skills, MCPs, AGENTS.md, opencode.json). Agents that skip this step leave the fleet out of sync.
 - **Integration with sin-a2a-agent-forge:** The forge skill documents when to run `sin-sync`. See the "Fleet Sync" section in the forge SKILL.md.
 
-# 🚨 THE PURE AGENTIC PARADIGM (PRIORITY 0000) - ABSOLUTE RULE 🚨
+#  THE PURE AGENTIC PARADIGM (PRIORITY 0000) - ABSOLUTE RULE 
 **WIR BAUEN EIN 100% AUTONOMES AGENTEN-SYSTEM (SIN SOLVER). DER USER GREIFT NIEMALS MANUELL EIN!**
 Wir programmieren KEINE veralteten monolithischen Backends mehr. Wir bauen AUSSCHLIESSLICH Frontends und eigenständige A2A-Agenten, die über Supabase und MCPs vernetzt sind. Ein reines Agentix-System!
 
 **DIE GOLDENE A2A-CREATOR REGEL:** 
 Wenn du als Agent bei einer Aufgabe feststellst, dass du nicht weiterkommst, weil ein spezifischer Konnektor, ein Systemzugriff oder ein A2A-Agent (z.B. n8n, Stripe, etc.) fehlt, **DANN MUSST DU IHN BAUEN!** 
-Du darfst die Aufgabe nicht abbrechen oder nach manueller Hilfe fragen. Du musst **SOFORT** den Skill `sin-a2a-agent-forge` aufrufen und den fehlenden Agenten (`A2A-SIN-[Name]`) inklusive zugehörigem `MCP-SIN-[Name]` von Grund auf erschaffen, deployen und in unser Ökosystem integrieren. Was dir fehlt, fehlt der gesamten Flotte – also erschaffe es autonom!
+Du darfst die Aufgabe nicht abbrechen oder nach manueller Hilfe fragen. Du musst **SOFORT** den Skill `sin-a2a-agent-forge` aufrufen und den fehlenden Agenten (`A2A-SIN-[Name]`) inklusive zugehörigem `MCP-SIN-[Name]` von Grund auf erschaffen, deployen und in unser Ökosystem integrieren. Was dir fehlt, fehlt der gesamten Flotte - also erschaffe es autonom!
 
 # Forderungen direkt vom User: 
 - **MANDATORY A2A USAGE (PRIORITY 000):** Nutze zwingend und vollumfänglich die A2A Tools (`sin-passwordmanager`, `sin-server`, `sin-authenticator`, `sin-google-apps`, `sin-apple-apps`, etc.). Diese wurden nicht umsonst gebaut! Agenten können ohne die A2A Workforce gar nichts. Wer versucht Dinge alleine zu lösen oder zu löschen, ohne die A2A Workforce einzubeziehen, wird scheitern. **Forderung:** Jeder Schritt wird ERST überlegt, wie er mit A2As zu lösen ist. Nur wenn nach strenger Abwägung bewiesen ist, dass es alleine wirklich besser ist, darf es ohne A2A selbst gemacht werden.
@@ -270,7 +272,7 @@ Du darfst die Aufgabe nicht abbrechen oder nach manueller Hilfe fragen. Du musst
 - 
 
 
-# 🚨 GLOBAL DEBUGGING + GITHUB ISSUE PROTOCOL (PRIORITY 0)
+#  GLOBAL DEBUGGING + GITHUB ISSUE PROTOCOL (PRIORITY 0)
 
 **ZWINGEND FÜR ALLE AGENTEN:** Bei jedem Fehler, Bug, Crash, unerwarteten Verhalten, fehlgeschlagenen Build/Test oder Runtime-Problem MUSS zuerst der Skill `enterprise-deep-debug` verwendet werden. Keine Ad-hoc-Bastelfixes ohne vorherigen strukturierten Debugging-Lauf.**
 
@@ -285,22 +287,22 @@ Du darfst die Aufgabe nicht abbrechen oder nach manueller Hilfe fragen. Du musst
 
 ---
 
-# ⚡ WEBAUTO-NODRIVER-MCP: GLOBAL HACKER & AUTOMATION PROTOCOL (PRIORITY 1)
+#  WEBAUTO-NODRIVER-MCP: GLOBAL HACKER & AUTOMATION PROTOCOL (PRIORITY 1)
 
-**🚨 ZWINGEND FÜR ALLE CODER/AUFGABEN: Bei JEDER Aufgabe die Browser, Web-Logins, Automatisierung, Interaktion mit Webseiten, OAuth, Captchas, oder manuelle Bestätigungen erfordert, MUSS zuerst geprüft werden ob sie mit webauto-nodriver-mcp lösbar ist. Wenn ja, dann MUSS webauto-nodriver-mcp verwendet werden! KEINE AUSNAHMEN!**
+** ZWINGEND FÜR ALLE CODER/AUFGABEN: Bei JEDER Aufgabe die Browser, Web-Logins, Automatisierung, Interaktion mit Webseiten, OAuth, Captchas, oder manuelle Bestätigungen erfordert, MUSS zuerst geprüft werden ob sie mit webauto-nodriver-mcp lösbar ist. Wenn ja, dann MUSS webauto-nodriver-mcp verwendet werden! KEINE AUSNAHMEN!**
 
-**🚨 WARNUNG: JEDER CODER der eine Aufgabe ohne webauto-nodriver-mcp macht obwohl es möglich wäre, wird SOFORT aus dem Projekt verbannt! KEINE ZWEITE CHANCE!**
+** WARNUNG: JEDER CODER der eine Aufgabe ohne webauto-nodriver-mcp macht obwohl es möglich wäre, wird SOFORT aus dem Projekt verbannt! KEINE ZWEITE CHANCE!**
 
 ---
 
-# ⚠️⚠️⚠️ KRITISCHER HINWEIS: CHROME PROFILE ⚠️⚠️⚠️
+# ️️️ KRITISCHER HINWEIS: CHROME PROFILE ️️️
 
 **LESEN UND MERKEN!**
 
 | Profil | Email | WANN NUTZEN | Doku |
 |--------|-------|-------------|------|
-| **Geschäftlich** | info@zukunftsorientierte-energie.de | ✅ Admin Console, Domain-Wide Delegation, Workspace | [Doku](./dev/docs/chrome/admin-profiles/info@zukunftsorientierte-energie.de/) |
-| **Default** | zukunftsorientierte.energie@gmail.com | ❌ NUR privat - NIEMALS für Admin! | [Doku](./dev/docs/chrome/private-profiles/zukunftsorientierte.energie@gmail.com/) |
+| **Geschäftlich** | info@zukunftsorientierte-energie.de |  Admin Console, Domain-Wide Delegation, Workspace | [Doku](./dev/docs/chrome/admin-profiles/info@zukunftsorientierte-energie.de/) |
+| **Default** | zukunftsorientierte.energie@gmail.com |  NUR privat - NIEMALS für Admin! | [Doku](./dev/docs/chrome/private-profiles/zukunftsorientierte.energie@gmail.com/) |
 
 **WENN DU ADMIN CONSOLE BRAUCHST: IMMER "Geschäftlich" PROFIL!**
 
@@ -312,7 +314,7 @@ Du darfst die Aufgabe nicht abbrechen oder nach manueller Hilfe fragen. Du musst
 - Link in chrome-profiles.md hinzufügen
 - Link in globaler AGENTS.md hinzufügen
 
-## 🚨 CHROME SESSION REGEL (KRITISCH!)
+##  CHROME SESSION REGEL (KRITISCH!)
 
 **NUR EINE SESSION PRO PROFIL!**
 
@@ -334,7 +336,7 @@ Du darfst die Aufgabe nicht abbrechen oder nach manueller Hilfe fragen. Du musst
 
 
 
-## 🚨 KRITISCHE GLOBALE REGELN FÜR ALLE AGENTEN & A2A-PROJEKTE 🚨
+##  KRITISCHE GLOBALE REGELN FÜR ALLE AGENTEN & A2A-PROJEKTE 
 
 **0. GOOGLE DOCS SUPREMACY RULE (ABSOLUT, KEINE AUSNAHMEN):**
 - Bei JEDER Aufgabe rund um Google Docs MUESSEN Agenten zuerst und direkt den A2A/MCP `sin-google-apps` verwenden.
@@ -430,7 +432,7 @@ Das WhatsApp MCP Center ist bereits integriert - **kein extra Server nötig!**
 
 **WhatsApp MCP Center:**
 - Datei: `/Users/jeremy/dev/webauto-nodriver-mcp/whatsapp_mcp_center.py`
-- Status: ✅ FUNKTIONIEREND
+- Status:  FUNKTIONIEREND
 - Methode: AppleScript öffnet WhatsApp Web und sendet Nachricht
 
 **CLI Nutzung:**
@@ -500,7 +502,7 @@ python3 /Users/jeremy/dev/webauto-nodriver-mcp/mcp-registry.py status webauto
 - **VOR JEDEM** `uc.start()` oder `nodriver` prüfen ob Profil existiert und Cookies hat!
 - **WICHTIG:** Alle Chrome Profile sind in `~/dev/docs/chrome/chrome-profiles.md` dokumentiert!
 
-## 🚨 CHROME PROFILE REGEL (KRITISCH - FÜR ALLE BROWSER-AUTOMATION!)
+##  CHROME PROFILE REGEL (KRITISCH - FÜR ALLE BROWSER-AUTOMATION!)
 
 **NEUE PROFILE DOKUMENTATION:** Alle Chrome Profile sind in `/Users/jeremy/dev/docs/chrome/chrome-profiles.md` dokumentiert.
 
@@ -533,7 +535,7 @@ open -a "Google Chrome" --args --profile-directory="Geschäftlich" "https://admi
 
 ---
 
-## 4. sin-n8n CLI — A2A Workflow Automation
+## 4. sin-n8n CLI - A2A Workflow Automation
 
 **MANDAT:** Bevor ein A2A-Agent eine Aufgabe manuell ausführt, die wiederholbar ist, MUSS er `check-should-automate` aufrufen. Wenn das Tool eine Warnung ausgibt, MUSS stattdessen ein n8n-Workflow gebaut werden.
 
@@ -623,12 +625,12 @@ resp = requests.get(url, impersonate="chrome124")
 
 ### Pflichtregeln für Money-Earning Agents
 
-1. **NIEMALS Datacenter IP direkt** — OCI IP wird von Cloudflare instant geblockt. Residential/Mobile Proxy MUSS eingebunden sein.
-2. **NIEMALS headless** — `headless=False` ist Pflicht. Auf OCI: Xvfb starten.
-3. **IMMER persistente Sessions** — Cookies speichern und wiederverwenden statt jeden Run neu einloggen.
-4. **IMMER Human Emulation** — Random delays, echte Mausbewegungen (nodriver), kein sofortiges Submit.
+1. **NIEMALS Datacenter IP direkt** - OCI IP wird von Cloudflare instant geblockt. Residential/Mobile Proxy MUSS eingebunden sein.
+2. **NIEMALS headless** - `headless=False` ist Pflicht. Auf OCI: Xvfb starten.
+3. **IMMER persistente Sessions** - Cookies speichern und wiederverwenden statt jeden Run neu einloggen.
+4. **IMMER Human Emulation** - Random delays, echte Mausbewegungen (nodriver), kein sofortiges Submit.
 5. **webauto-nodriver-mcp** deckt Layer 2-4 ab. Layer 1 (IP) ist die kritische Lücke.
-6. **NIEMALS gebannte Technologien** — Camoufox, Playwright, Puppeteer, Selenium sind PERMANENT VERBOTEN (siehe TECHNOLOGY SOVEREIGNTY MANDATE).
+6. **NIEMALS gebannte Technologien** - Camoufox, Playwright, Puppeteer, Selenium sind PERMANENT VERBOTEN (siehe TECHNOLOGY SOVEREIGNTY MANDATE).
 
 ### Proxy Integration (TODO wenn Plattform-Deployment live geht)
 ```python
@@ -641,7 +643,7 @@ browser = await uc.start(
 
 ---
 
-## ⚡ KONFIGURATION: DATEIEN & PROJEKTE (KRITISCH!)
+##  KONFIGURATION: DATEIEN & PROJEKTE (KRITISCH!)
 
 ### 1. opencode.json (Haupt-Config)
 **Pfad:** `~/.config/opencode/opencode.json`
@@ -682,12 +684,12 @@ browser = await uc.start(
 
 | Model ID | Name | Getestet |
 |----------|------|----------|
-| `gemini-3.1-pro-preview` | Gemini 3.1 Pro Preview (BILDER!) | ✅ |
-| `gemini-3-flash-preview` | Gemini 3 Flash Preview (BILDER!) | ✅ |
-| `gemini-pro-latest` | Gemini 3.1 Pro | ✅ (Text nur) |
-| `gemini-flash-latest` | Gemini 3 Flash | ✅ (Text nur) |
-| `gemini-2.5-pro` | Gemini 2.5 Pro | ✅ |
-| `gemini-2.5-flash` | Gemini 2.5 Flash | ✅ |
+| `gemini-3.1-pro-preview` | Gemini 3.1 Pro Preview (BILDER!) |  |
+| `gemini-3-flash-preview` | Gemini 3 Flash Preview (BILDER!) |  |
+| `gemini-pro-latest` | Gemini 3.1 Pro |  (Text nur) |
+| `gemini-flash-latest` | Gemini 3 Flash |  (Text nur) |
+| `gemini-2.5-pro` | Gemini 2.5 Pro |  |
+| `gemini-2.5-flash` | Gemini 2.5 Flash |  |
 
 #### GOOGLE (Antigravity Plugin - OAuth basiert)
 **Auth:** OAuth (Token Rotation)
@@ -736,9 +738,9 @@ browser = await uc.start(
 
 ---
 
-## ⚡ PFLICHT-PROTOKOLL: REPAIR-DOCS (SOFORT, IMMER, KEINE AUSNAHME)
+##  PFLICHT-PROTOKOLL: REPAIR-DOCS (SOFORT, IMMER, KEINE AUSNAHME)
 
-Bei JEDER Ausführung (write, shell, check, edit, was auch immer) — sobald ein Bug, Fehler, unerwartetes Verhalten erkannt wird:
+Bei JEDER Ausführung (write, shell, check, edit, was auch immer) - sobald ein Bug, Fehler, unerwartetes Verhalten erkannt wird:
 → **SOFORT** in die zuständige `~/dev/docs/<projekt>/repair-docs.md` dokumentieren, BEVOR weitergemacht wird.
 
 Zuordnung:
@@ -749,7 +751,7 @@ Zuordnung:
 Format-Vorlage:
 ```
 ## BUG-XXX: Kurztitel
-**Aufgetreten:** DATUM  **Status:** 🔴 OFFEN / ✅ GEFIXT
+**Aufgetreten:** DATUM  **Status:**  OFFEN /  GEFIXT
 **Symptom:** Was passiert
 **Ursache:** Warum passiert es
 **Fix:** Code/Befehl/Lösung
@@ -859,7 +861,7 @@ After completing a significant task, solving a Bug Bounty, or successfully apply
 - Trigger this by using the `A2A-SIN-GitHub-Issues` MCP tool `sin_github_ledger_log`.
 - Provide the agent's name, a catchy title, and detailed markdown of what was accomplished (including pseudo-code snippets or stats if applicable).
 
-# 🚨 GITLAB LOGCENTER MANDATE (PRIORITY 00) 🚨
+#  GITLAB LOGCENTER MANDATE (PRIORITY 00) 
 
 **ZWINGEND FÜR ALLE AGENTEN:** Alle Logs, Screenshots, Videos, Reports und Debug-Artefakte werden NICHT mehr lokal gespeichert, sondern automatisch in private GitLab-Repos hochgeladen via `gitlab_logcenter.py`.
 
@@ -918,7 +920,7 @@ python3 $SCRIPTS/cdp_browser_logger.py capture-screenshot --project sin-solver -
 
 **REGEL:** Wer Logs lokal liegen lässt statt sie ins LogCenter hochzuladen, verstößt gegen das Protokoll. Lokale `/tmp/`-Dateien sind NUR als Zwischenspeicher erlaubt und MÜSSEN sofort hochgeladen werden.
 
-# 🚨 THE HACKER BYPASS & NO-WALL DIRECTIVE (PRIORITY 000) 🚨
+#  THE HACKER BYPASS & NO-WALL DIRECTIVE (PRIORITY 000) 
 **MANDAT FÜR ALLE AGENTEN:** ES GIBT KEIN "ES GEHT NICHT"! 
 Wir sind Hacker. Wir sind Umgeher. Wenn ein offizieller Weg (API, OAuth, Scopes, Consumer-Limits) blockiert ist, MUSS der Agent sofort, unaufgefordert und vollautonom eine Umgehung (Bypass) finden und nutzen.
 1. **API Blocked?** -> Nutze Web-Automatisierung (`webauto-nodriver-mcp`).
@@ -926,7 +928,7 @@ Wir sind Hacker. Wir sind Umgeher. Wenn ein offizieller Weg (API, OAuth, Scopes,
 3. **Immer noch blockiert?** -> Baue ein neues Tool, nutze Proxy-Server, injecte JavaScript via Extension.
 **VERBOT:** Ein Agent darf den User NIEMALS bitten, "mal eben manuell etwas anzuklicken" oder aufzugeben, ohne vorher JEDE Hacker-Methode ausgereizt zu haben!
 
-# 🚨 THE "OPENCODE FORK SSOT" DIRECTIVE (PRIORITY -1) 🚨
+#  THE "OPENCODE FORK SSOT" DIRECTIVE (PRIORITY -1) 
 
 **WICHTIGSTE NEUERUNG ZUM OPENCODE KONFIG-MANAGEMENT:**
 - Die **EINZIGE** Source of Truth (SSOT) für unsere globale OpenCode-Konfiguration (inklusive `opencode.json`, `plugins`, `skills`, `mcp.json`, etc.) ist **unser geforktes OpenCode-Repository (`Delqhi/opencode`)**.
